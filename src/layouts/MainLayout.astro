@@ -1,0 +1,53 @@
+---
+import Footer from "../components/Footer.astro";
+import Navbar from "../components/Navbar.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../constants";
+const { title } = Astro.props;
+
+interface Props {
+  title: string;
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content="Astro" />
+    <meta name="description" content={SITE_DESCRIPTION} />
+    <title>{SITE_TITLE} - {title}</title>
+  </head>
+  <body class="bg-white dark:bg-slate-800">
+    <Navbar />
+    <!--Main Blogs -->
+    <main class="container mx-auto px-4 md:px-8 py-6 mt-12">
+      <slot />
+      <Footer />
+    </main>
+  </body>
+
+  <script is:inline>
+    const theme = (() => {
+      if (
+        typeof localStorage !== "undefined" &&
+        localStorage.getItem("theme")
+      ) {
+        return localStorage.getItem("theme");
+      }
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark";
+      }
+      return "light";
+    })();
+    document.querySelector("html").setAttribute("class", theme);
+    const lightIcon = document.getElementById("light-icon");
+    const darkIcon = document.getElementById("dark-icon");
+
+    if (theme == "light") {
+      lightIcon.classList.add("hidden");
+    } else {
+      darkIcon.classList.add("hidden");
+    }
+  </script>
+</html>

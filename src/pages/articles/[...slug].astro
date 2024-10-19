@@ -1,0 +1,47 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import { getEntry } from "astro:content";
+import { formatDate } from "../../utils";
+import Tags from "../../components/Tags.astro";
+
+const { slug } = Astro.params;
+if (slug == undefined) {
+  throw new Error("Slug is required");
+}
+
+const article = await getEntry("blog", slug);
+
+if (article == undefined) {
+  return Astro.redirect("/404");
+}
+const { Content } = await article.render();
+---
+
+<MainLayout title={article.data.title}>
+  <article
+    class="dark:bg-slate-800 bg-white dark:text-white rounded-lg overflow-hidden p-4"
+  >
+    <img
+      src={`/article-images/${article.slug}/${article.data.coverImageUrl}`}
+      alt="Article hero image"
+      class="w-[80%] md:w-[60%] h-auto mx-auto mb-6 object-cover"
+    />
+    <h1 class="text-4xl font-bold mb-4">{article.data.title}</h1>
+
+    <div class="flex items-center text-sm dark:text-white text-gray-600 mb-6">
+      <span>{formatDate(article.data.date)}</span>
+      <span class="mx-2">•</span>
+      <img
+        src={`/${article.data.authorImageUrl}`}
+        alt="Author"
+        class="w-8 h-8 rounded-full mr-2"
+      />
+      <span>{article.data.author}</span>
+    </div>
+
+    <div class="prose dark:prose-invert max-w-none mb-10">
+      <Content />
+    </div>
+    <Tags tags={article.data.tags} />
+  </article>
+</MainLayout>

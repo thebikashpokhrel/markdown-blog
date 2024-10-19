@@ -1,16 +1,47 @@
 ---
+import MainLayout from "../layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import ArticleCard from "../components/ArticleCard.astro";
+import { ARTICLES_PER_PAGE } from "../constants";
+import Pagination from "../components/Pagination.astro";
 
+const currentPage: number | null = +Astro.url.searchParams.get("page")! || 1;
+
+const blogArticles: CollectionEntry<"blog">[] = (
+  await getCollection("blog")
+).sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const totalPages = Math.ceil(blogArticles.length / ARTICLES_PER_PAGE);
+const articlesInPage: CollectionEntry<"blog">[] = blogArticles.slice(
+  (currentPage - 1) * ARTICLES_PER_PAGE,
+  currentPage * ARTICLES_PER_PAGE
+);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout title="Home">
+  <h1 class="text-xl font-bold text-center mb-1 dark:text-white">
+    From thebikash Blog
+  </h1>
+  <p class="text-md dark:text-slate-400 text-center mb-6">
+    a random mix of programming, engineering, and science
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {
+      articlesInPage
+        .slice(0, ARTICLES_PER_PAGE)
+        .map((article) => <ArticleCard article={article} />)
+    }
+  </div>
+
+  <Pagination
+    currentPage={currentPage}
+    totalPages={totalPages}
+    disablePrev={currentPage == 1}
+    disableNext={currentPage == totalPages}
+  />
+</MainLayout>

@@ -1,0 +1,58 @@
+---
+const { currentPage, totalPages, disableNext, disablePrev } = Astro.props;
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  disablePrev: Boolean;
+  disableNext: Boolean;
+}
+---
+
+<!-- Pagination -->
+<div class="flex justify-center mt-4">
+  <nav class="flex justify-center mt-8" aria-label="Pagination">
+    <ul class="inline-flex space-x-2">
+      <li>
+        <a
+          href={`/?page=${currentPage - 1}`}
+          class={`pagination-item ${disablePrev ? "pagination-disabled" : ""}`}
+          aria-current="page">Previous</a
+        >
+      </li>
+      {
+        Array.from({ length: totalPages }, (_, index: any) => (
+          <li>
+            <a
+              href={`/?page=${index + 1}`}
+              class={`pagination-item ${index + 1 == currentPage ? "pagination-item-active" : ""}`}
+              aria-current="page"
+            >
+              {index + 1}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a
+          href={`/?page=${currentPage + 1}`}
+          class={`pagination-item ${disableNext ? "pagination-disabled" : ""}`}
+          aria-current="page">Next</a
+        >
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<style>
+  .pagination-item {
+    @apply rounded-full px-3 py-2 text-sm font-medium border dark:text-white border-gray-400 dark:hover:text-slate-800 hover:bg-gray-200 transition duration-300;
+  }
+
+  .pagination-item-active {
+    @apply bg-primary text-white border-primary hover:bg-primary-dark;
+  }
+
+  .pagination-disabled {
+    @apply dark:bg-gray-600 dark:text-gray-500 dark:border-gray-500 bg-gray-200 text-gray-400 pointer-events-none;
+  }
+</style>

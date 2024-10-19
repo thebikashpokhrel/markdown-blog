@@ -1,0 +1,47 @@
+---
+import { formatDate } from "../utils";
+import type { CollectionEntry } from "astro:content";
+import Tags from "./Tags.astro";
+const { article } = Astro.props;
+
+interface Props {
+  article: CollectionEntry<"blog">;
+}
+---
+
+<article
+  class="dark:bg-slate-700 bg-white rounded-lg overflow-hidden shadow-lg transition duration-300 hover:shadow-xl flex flex-col h-full"
+>
+  <a href={`/articles/${article.slug}`} data-type="navigate" class="block">
+    <img
+      src={`/article-images/${article.slug}/${article.data.coverImageUrl}`}
+      alt="Blog post image"
+      class="w-full h-48 object-cover"
+    />
+  </a>
+  <div class="p-4 flex flex-col flex-grow dark:text-white">
+    <a
+      href={`/articles/${article.slug}`}
+      data-type="navigate"
+      class="block text-xl font-semibold mb-2 hover:text-primary transition duration-100"
+    >
+      {article.data.title}
+    </a>
+    <div
+      class="flex items-center text-sm dark:text-gray-300 text-gray-600 mb-4"
+    >
+      <span>{formatDate(article.data.date)}</span>
+      <span class="mx-2">•</span>
+      <img
+        src={`/${article.data.authorImageUrl}`}
+        alt="Author"
+        class="w-6 h-6 rounded-full mr-2"
+      />
+      <span>{article.data.author}</span>
+    </div>
+    <p class="dark:text-slate-100 text-gray-700 flex-grow">
+      {article.data.summary}
+    </p>
+    <Tags tags={article.data.tags} />
+  </div>
+</article>

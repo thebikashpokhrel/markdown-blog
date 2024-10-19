@@ -1,0 +1,66 @@
+---
+import { SITE_TITLE } from "../constants";
+import { Icon } from "astro-icon/components";
+---
+
+<nav class="dark:bg-slate-700 bg-white shadow-md fixed w-full top-0">
+  <div
+    class="container mx-auto px-4 md:px-8 flex justify-between items-center py-2"
+  >
+    <a href="/" class="text-2xl font-semibold text-slate-800 dark:text-white"
+      >{SITE_TITLE}</a
+    >
+    <div class="space-x-4 flex items-center">
+      <button
+        id="light-icon"
+        class="rounded-full inline-block dark:text-white text-slate-800 text-xl p-2 transition hover:bg-slate-800 hover:text-white focus:outline-none dark:hover:text-slate-800 dark:hover:bg-white"
+      >
+        <Icon name="mdi:white-balance-sunny" />
+      </button>
+
+      <button
+        id="dark-icon"
+        class="rounded-full inline-block dark:text-white text-slate-800 text-xl p-2 transition hover:bg-slate-800 hover:text-white focus:outline-none dark:hover:text-slate-800 dark:hover:bg-white"
+      >
+        <Icon name="mdi:weather-night" />
+      </button>
+
+      <a
+        href="/tags"
+        class="dark:text-white text-gray-600 hover:text-primary transition duration-300"
+        >Tags</a
+      >
+      <a
+        href="/about"
+        class="dark:text-white text-gray-600 hover:text-primary transition duration-300"
+        >About</a
+      >
+    </div>
+  </div>
+</nav>
+
+<script>
+  function toggleThemeMode() {
+    const html = document.querySelector("html");
+    let theme = localStorage.getItem("theme");
+    const lightIcon = document.getElementById("light-icon");
+    const darkIcon = document.getElementById("dark-icon");
+    if (theme == "dark") {
+      localStorage.setItem("theme", "light");
+      html?.setAttribute("class", "");
+      darkIcon?.classList.remove("hidden");
+      lightIcon?.classList.add("hidden");
+    } else {
+      localStorage.setItem("theme", "dark");
+      html?.setAttribute("class", "dark");
+      lightIcon?.classList.remove("hidden");
+      darkIcon?.classList.add("hidden");
+    }
+  }
+  document
+    .getElementById("dark-icon")
+    ?.addEventListener("click", toggleThemeMode);
+  document
+    .getElementById("light-icon")
+    ?.addEventListener("click", toggleThemeMode);
+</script>

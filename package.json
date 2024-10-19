@@ -10,8 +10,15 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.16.6",
     "@astrojs/check": "^0.9.4",
+    "@astrojs/tailwind": "^5.1.2",
+    "@iconify-json/mdi": "^1.2.1",
+    "@tailwindcss/typography": "^0.5.15",
+    "astro": "^4.16.6",
+    "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "astro-icon": "^1.1.1"
   }
 }
