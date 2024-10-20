@@ -6,8 +6,6 @@ import ArticleCard from "../components/ArticleCard.astro";
 import { ARTICLES_PER_PAGE } from "../constants";
 import Pagination from "../components/Pagination.astro";
 
-const currentPage: number | null = +Astro.url.searchParams.get("page")! || 1;
-
 const blogArticles: CollectionEntry<"blog">[] = (
   await getCollection("blog")
 ).sort(
@@ -15,6 +13,7 @@ const blogArticles: CollectionEntry<"blog">[] = (
     b.data.date.valueOf() - a.data.date.valueOf()
 );
 
+const currentPage: number | null = +Astro.url.searchParams.get("page")! || 1;
 const totalPages = Math.ceil(blogArticles.length / ARTICLES_PER_PAGE);
 const articlesInPage: CollectionEntry<"blog">[] = blogArticles.slice(
   (currentPage - 1) * ARTICLES_PER_PAGE,
@@ -30,13 +29,17 @@ const articlesInPage: CollectionEntry<"blog">[] = blogArticles.slice(
     a random mix of programming, engineering, and science
   </p>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {
-      articlesInPage
-        .slice(0, ARTICLES_PER_PAGE)
-        .map((article) => <ArticleCard article={article} />)
-    }
-  </div>
+  {
+    totalPages == 0 ? (
+      <h1 class="dark:text-white">No any articles published.</h1>
+    ) : (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {articlesInPage.slice(0, ARTICLES_PER_PAGE).map((article) => (
+          <ArticleCard article={article} />
+        ))}
+      </div>
+    )
+  }
 
   <Pagination
     currentPage={currentPage}

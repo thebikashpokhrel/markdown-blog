@@ -8,40 +8,47 @@ interface Props {
 }
 ---
 
-<!-- Pagination -->
-<div class="flex justify-center mt-4">
-  <nav class="flex justify-center mt-8" aria-label="Pagination">
-    <ul class="inline-flex space-x-2">
-      <li>
-        <a
-          href={`/?page=${currentPage - 1}`}
-          class={`pagination-item ${disablePrev ? "pagination-disabled" : ""}`}
-          aria-current="page">Previous</a
-        >
-      </li>
-      {
-        Array.from({ length: totalPages }, (_, index: any) => (
+<!-- Pagination -->{
+  totalPages != 0 ? (
+    <div class="flex justify-center mt-4">
+      <nav class="flex justify-center mt-8" aria-label="Pagination">
+        <ul class="inline-flex space-x-2">
           <li>
             <a
-              href={`/?page=${index + 1}`}
-              class={`pagination-item ${index + 1 == currentPage ? "pagination-item-active" : ""}`}
+              href={`/?page=${currentPage - 1}`}
+              class={`pagination-item ${disablePrev ? "pagination-disabled" : ""}`}
               aria-current="page"
             >
-              {index + 1}
+              Previous
             </a>
           </li>
-        ))
-      }
-      <li>
-        <a
-          href={`/?page=${currentPage + 1}`}
-          class={`pagination-item ${disableNext ? "pagination-disabled" : ""}`}
-          aria-current="page">Next</a
-        >
-      </li>
-    </ul>
-  </nav>
-</div>
+          {Array.from({ length: totalPages }, (_, index: any) => (
+            <li>
+              <a
+                href={`/?page=${index + 1}`}
+                class={`pagination-item ${index + 1 == currentPage ? "pagination-item-active" : ""}`}
+                aria-current="page"
+              >
+                {index + 1}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a
+              href={`/?page=${currentPage + 1}`}
+              class={`pagination-item ${disableNext ? "pagination-disabled" : ""}`}
+              aria-current="page"
+            >
+              Next
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  ) : (
+    ""
+  )
+}
 
 <style>
   .pagination-item {
